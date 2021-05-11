@@ -9,7 +9,7 @@ import org.jsoup.nodes.Document
 class RequestBook(private val urlBook: String) {
 
     private fun getDocumentJsoup(url: String): Document {
-        return Jsoup.connect(url).get()
+        return Jsoup.connect(url).ignoreHttpErrors(true).get()
     }
 
     fun getBook(): Book {
@@ -70,7 +70,7 @@ class RequestBook(private val urlBook: String) {
     }
 
     private fun getOneChapterText(doc: Document): MutableList<Chapter> {
-        var chaptersList: MutableList<Chapter> = ArrayList<Chapter>()
+        val chaptersList: MutableList<Chapter> = ArrayList()
         val chapterText = doc.select("div[id=content]").text()
         val chapterCreationDate = doc.select("div[class=part-date]").select("span").text()
         val chapterTitle = doc.select("title").text().split(",").first()
@@ -79,7 +79,7 @@ class RequestBook(private val urlBook: String) {
     }
 
     private fun getManyChapters(doc: Document): MutableList<Chapter> {
-        var chaptersList: MutableList<Chapter> = ArrayList<Chapter>()
+        val chaptersList: MutableList<Chapter> = ArrayList()
         val chaptersElements = doc.select("li[class=part]")
         chaptersElements.forEach {
             val chapterName = it.select("h3").text()

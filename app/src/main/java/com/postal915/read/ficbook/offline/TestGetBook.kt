@@ -1,10 +1,66 @@
 package com.postal915.read.ficbook.offline
 
 import com.postal915.read.ficbook.offline.data.Book
+import org.jsoup.Connection
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 
 fun main() {
+//    testBookProject()
+    testJsoupConfiguration()
+//    test()
+}
 
-    val book: Book = RequestBook(urlsTestBook()[4]).getBook()
+private fun test(){
+    val url = urlsTestBook()[1]
+
+
+
+    val getDocumentJsoup = Jsoup.connect(url)
+        .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36")
+        .ignoreHttpErrors(true)
+        .timeout(10000)
+        .get()
+//    val sizeBookElements = getDocumentJsoup.select("div[class=mb-5]").first().text()
+    val sizeBookElements = getDocumentJsoup.select("div[class=mb-5]").text()
+    print(getDocumentJsoup)
+}
+
+//private fun getBookSize(doc: Document): Array<Any> {
+//    val sizeBookElements = doc.select("div[class=mb-5]").first().text()
+//    val bookSize = sizeBookElements.split(",")[0].split(" ").last()
+//    val pages = sizeBookElements.split(",")[1].replace("\\D".toRegex(), "").toInt()
+//    val chapters = sizeBookElements.split(",")[2].replace("\\D".toRegex(), "").toInt()
+//    val manyChaptersBoolean = isManyChapters(chapters)
+//    return arrayOf(bookSize, pages, chapters, manyChaptersBoolean)
+//}
+
+private fun testJsoupConfiguration() {
+    val url = "https://ficbook.net";
+
+//    val response: Connection.Response = Jsoup.connect(url)
+//        .userAgent("Mozilla/5.0 (Windows NT 6.0) AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.46 Safari/536.5")
+//        .timeout(10000)
+//        .followRedirects(false)
+//        .ignoreHttpErrors(true) // <--- Underlined red in eclipse plus the error msg
+//        .execute()
+//    val cookies = response.cookies()
+//    println(cookies)
+//    println(response.statusCode())
+
+
+    val getDocumentJsoup = Jsoup.connect(url)
+        .userAgent("Mozilla/5.0 (Windows NT 6.0) AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.46 Safari/536.5")
+        .cookie("__cfduid", "d638e8fcea810971ad469329bab139ab71619300951")
+        .ignoreHttpErrors(true)
+        .get()
+
+    println(getDocumentJsoup)
+}
+
+fun testBookProject() {
+//    val book: Book = RequestBook(urlsTestBook()[4]).getBook()
+    val book: Book = RequestBook(urlsTestBook()[1]).getBook()
 
     // TODO написать тесты
     // TODO увиличить быстродействие при нескольких главах
@@ -22,8 +78,8 @@ fun main() {
 //    println(book.chapter.first().chapterCreationDate)
 //    println(book.chapter.first().chapterLink)
 //    println(book.chapter.first().chapterText)
-
 }
+
 
 fun urlsTestBook(): Array<String> {
     return arrayOf(
